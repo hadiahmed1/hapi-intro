@@ -9,7 +9,17 @@ const helloName = (request, h) => {
 const init = async () => {
   const server = Hapi.server({
     port: 3000,
-    host: 'localhost'
+    host: 'localhost',
+    routes: {
+      validate: {
+        failAction: (request, h, err) => {
+          return h
+            .response({ error: err.details[0].message })
+            .code(400)
+            .takeover();
+        }
+      }
+    }
   });
 
   server.route([{
