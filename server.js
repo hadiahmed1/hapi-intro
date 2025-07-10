@@ -1,4 +1,5 @@
 import Hapi from "@hapi/hapi"
+import { userRoute } from "./routes/userRoutes.js";
 
 const helloName = (request, h) => {
   const name = request.params.name;
@@ -21,7 +22,7 @@ const init = async () => {
     path: '/hello/{name}',
     handler: helloName
   }]);
-
+  await server.register(userRoute);
   await server.start();
   console.log('Server running on %s', server.info.uri);
 };
