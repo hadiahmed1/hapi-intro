@@ -1,3 +1,5 @@
+import { createUserSchema } from "../validators/userSchema.js";
+
 const users = [{ id: '1', name: 'hadi' }]
 
 export const userRoute = {
@@ -11,9 +13,20 @@ export const userRoute = {
             }
         },
         {
-            path:'/user',
-            method:'POST',
-            handler:(request, h)=>{
+            path: '/user',
+            method: 'POST',
+            options: {
+                payload: {
+                    parse: true,
+                    output: 'data',
+                    allow: ['application/json', 'application/x-www-form-urlencoded', 'multipart/form-data'],
+                    multipart: true
+                },
+                validate: {
+                    payload: createUserSchema
+                }
+            },
+            handler: (request, h) => {
                 const user = request.payload;
                 users.push(user)
                 return h.response(user).code(200)
